@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <script>
+            var a = [];
+            var size;
+
+            size =parseInt(prompt("Enter array size : "));
+            
+            for(var i=0;i<size;i++)
+            {
+                a[i] = parseInt(prompt("Enter " + (i+1) + " no : "));
+            }
+
+            var max = 0, min = a[0] ,sum = 0;
+            for(let i=0; i<size;i++)
+            {
+                document.write("No is : " + a[i] + "<br>");
+                if(max<a[i])
+                {
+                    max = a[i];
+                }
+                if(min>a[i]) 
+                {
+                    min = a[i];
+                }        
+                sum =sum+a[i];
+            }
+            document.write("<h1>Minimum number is:" +min+ "<br>");
+            document.write("Maximuum no is : " + max + "<br>");
+            document.write("Sum is : " + sum + "<br></h1>");
+        </script>
+    </head>
+</html>

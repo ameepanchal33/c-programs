@@ -1,0 +1,26 @@
+
+<html>
+    <head>
+        <script>
+            function maximum(a, b, c)
+            {
+                if(a>b && a>c)
+                {
+                    return a;
+                }
+                else if(b>c)
+                {
+                    return b;
+                }
+                else
+                {
+                    return c;
+                }
+            }
+            var a = parseInt(prompt("Enter 1st no : "));
+            var b = parseInt(prompt("Enter 2nd no : "));
+            var c = parseInt(prompt("Enter 3rd no : "));
+            document.write("<h1>Maximum no is : " + maximum(a, b, c) + "<br></h1>");
+        </script>
+    </head>
+</html>
