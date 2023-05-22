@@ -1,0 +1,111 @@
+create database tw;
+
+use tw;
+
+create table Emp(
+    eid varchar(6) primary key,
+    ename varchar(30),
+    salary int(6),
+    city varchar(15),
+    depname varchar(15)
+);
+
+create table leave1(
+    leaveid varchar(6) primary key,
+    leavetype varchar(3),
+    check (leavetype in('cl', 'dl', 'ml'))
+);
+
+create table Emp_leave(
+    eid varchar(6),
+    leaveid varchar(6),
+    leavedate date,
+    foreign key (eid) references Emp(eid),
+    foreign key (leaveid) references leave1(leaveid),
+    primary key (eid, leaveid)
+);
+
+insert into emp (eid, ename, salary, city, depname) values 
+('1', 'mamta', 10000, 'nadiad', 'sales'),
+('2', 'dhavani', 20000, 'bhavnagar', 'sales'),
+('3', 'raj', 12000, 'nadiad', 'HR'),
+('4', 'shrinivash', 23000, 'ahemdabad', 'production'),
+('5', 'jalak', 15000, 'nadiad', 'sales'),
+('6', 'dinesh', 8000, 'bhavnagar', 'HR'),
+('7', 'jay', 7000, 'nadiad', 'sales'),
+('8', 'harshil', 10000, 'ahemdabad', 'production'),
+('9', 'meet', 22000, 'bhavnagar', 'HR'),
+('10', 'rahul', 12000, 'nadiad', 'production');
+
+insert into leave1(leaveid, leavetype) values
+('1', 'CL'),
+('2', 'DL'),
+('3', 'ML');
+
+insert into Emp_leave(eid, leaveid, leavedate) values
+('1', '1', '2022-12-9'),
+('2', '2', '2013-10-7'),
+('3', '3', '2019-10-10'),
+('4', '2', '2020-8-15'),
+('6', '2', '2019-10-14'),
+('5', '1', '2021-1-5'),
+('7', '3', '2020-2-5'),
+('8', '2', '2015-6-12'),
+('9', '1', '2005-7-21'),
+('10', '3', '2019-8-22');
+
+-------------------------------------------------------------------
+select ename from emp where ename like 'd%';
+
+select * from emp where salary between 10000 and 15000;
+
+select ename from emp where eid in (select eid from emp_leave where leaveid in (select leaveid from leave1 where leavetype='cl'));
+
+select eid, leaveid from Emp_leave where leavedate<'2019-02-12';
+
+select depname, sum(salary) as 'Total salary' from emp group by(depname);
+
+select leavetype from emp, Emp_leave, leave1 where emp.eid = Emp_leave.eid and Emp_leave.leaveid = leave1.leaveid and ename='rakesh'; 
+
+select leavedate from leave1, Emp_leave where leave1. leaveid=Emp_leave.leaveid and leavetype='dl';
+
+update emp set city = 'baroda' where ename = 'rakesh';
+
+-----------------------------------------------
+
+delimiter $$
+
+create procedure find_max_salary(in dep varchar(15), out maxsal int)
+begin
+    select eid, leaveid, leavedate from Emp_leave where eid in (select eid from emp where depname = dep);
+    select max(salary) into maxsal from emp;
+end
+$$
+delimiter ;
+
+call find_max_salary('sales', @maxsal);
+
+select @maxsal;
+
+-----------------------------------------------------
+
+delimiter //
+
+create function disp(lid varchar(6)) returns varchar(30)
+DETERMINISTIC
+BEGIN
+	declare name varchar(30);
+    select ename into name from emp where eid not in (select eid from Emp_leave where leaveid = lid);
+    return name;
+END //
+
+delimiter ;
+-----------------------------------------------------------------------------
+delimiter //
+
+create procedure disp(lid varchar(6))
+BEGIN
+    select ename from emp where eid not in (select eid from Emp_leave where leaveid = lid);
+END //
+
+delimiter ;
