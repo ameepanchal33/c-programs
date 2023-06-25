@@ -12,6 +12,10 @@ float volume(float pi,float radious){
 float volume(float pi,int r,int h){
 	cout<<"cylinder volume"<<(pi*r*r*h);
 }
+float volume(float pi,float r,int h){
+	cout<<"cone volume:"<<(pi*r*r*h);
+}
+
 
 int main()
 {
@@ -22,5 +26,8 @@ int main()
 	volume(3.14f,5.0f);
 	cout<<endl;
 	volume(3.14f,5,6);
+	cout<<endl;
+	volume(3.14f,5.0f,6);
+	
 	
 }

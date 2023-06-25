@@ -43,6 +43,7 @@ int main()
 	    
 	    case 3:
 	   	totalBalance();
+	   	cout<<"your balnce:";
 	   	break;
 	    
 		
